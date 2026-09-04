@@ -1,0 +1,12 @@
+#!/bin/sh
+# `bapbong` on the PATH of a Claude Code session that installed this plugin
+# (plugins' bin/ is added to the Bash tool's PATH). The same command the
+# bapbong app installs on the Mac; here it runs the Node bundle that ships
+# with the skill, so it also works where the app's symlink is absent — a
+# sandbox, a remote session. Needs `node`.
+self="$0"
+while [ -L "$self" ]; do
+  target="$(readlink "$self")"
+  case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
+done
+exec node "$(dirname "$self")/../skills/bapbong/scripts/bapbong.cjs" "$@"

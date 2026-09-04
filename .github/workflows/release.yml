@@ -1,0 +1,21 @@
+# On a version tag, attach the skill as a ZIP for Claude Desktop (Customize ›
+# Skills › + › Upload a skill takes a ZIP of the skill folder). Claude Code
+# and Codex install from the repo itself and need no asset.
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip the bapbong skill folder
+        run: |
+          cd plugins/bapbong/skills
+          zip -r ../../../bapbong-skill.zip bapbong -x "*/__pycache__/*"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: bapbong-skill.zip

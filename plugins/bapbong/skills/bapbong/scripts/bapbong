@@ -1,0 +1,10 @@
+#!/bin/sh
+# `bapbong` for the sandbox: the app's own command line, bundled for Node
+# (bapbong.cjs, built from apps/desktop/src/cli/main.ts by stage.mjs). Same
+# commands, same output as `bapbong` on the Mac.
+self="$0"
+while [ -L "$self" ]; do
+  target="$(readlink "$self")"
+  case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
+done
+exec node "$(dirname "$self")/bapbong.cjs" "$@"

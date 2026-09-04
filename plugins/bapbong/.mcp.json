@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "bapbong": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/bapbong",
+      "args": ["mcp"]
+    }
+  }
+}

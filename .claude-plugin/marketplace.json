@@ -1,0 +1,20 @@
+{
+  "name": "shadow-garden",
+  "owner": {
+    "name": "Shadow Garden",
+    "url": "https://github.com/shadowgarden-app"
+  },
+  "metadata": {
+    "description": "Official plugins and skills for bapbong, the .docx editor by Shadow Garden."
+  },
+  "plugins": [
+    {
+      "name": "bapbong",
+      "source": "./plugins/bapbong",
+      "description": "Read, edit, create, search, move and delete .docx documents through the running bapbong app — the user's own editor, under the permission they set per folder. Ships the bapbong command line (skill) and the bapbong MCP server.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["docx", "word", "documents", "bapbong", "mcp"]
+    }
+  ]
+}

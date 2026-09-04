@@ -1,0 +1,75 @@
+# shadow-garden-skill-official
+
+Official plugins and skills for [bapbong](https://bapbong.app), the `.docx`
+editor by Shadow Garden. Everything here talks to the **running bapbong app**
+— the user's own editor — and goes through the permission the user set per
+folder (off / read-only / ask / auto). Nothing edits a file behind their back.
+
+| Plugin | What it gives an agent |
+|---|---|
+| `bapbong` | the `bapbong` command line as a skill (read, search, edit, create, move, delete, render pages), and the bapbong MCP server |
+
+Requires the bapbong app to be running. On a Mac the app installs the
+`bapbong` command itself; the skill carries a Node bundle of the same command
+for places where the app is not present (Claude Desktop's sandbox, remote
+sessions).
+
+## Claude Code
+
+```
+/plugin marketplace add shadowgarden-app/shadow-garden-skill-official
+/plugin install bapbong@shadow-garden
+```
+
+That gives the skill, `bapbong` on the session's PATH, and the MCP server.
+MCP only, without the plugin:
+
+```
+claude mcp add bapbong -- bapbong mcp
+```
+
+## Claude Desktop
+
+**Skill** — download `bapbong-skill.zip` from the
+[latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest),
+then in Claude: Customize › Skills › + › Create skill › Upload a skill.
+Turn on *Settings › AI agents › Claude Desktop sandbox* in bapbong first:
+skills run in a VM and reach the app through the folder you have open.
+
+**MCP** — Settings › Developer › Edit Config, merge:
+
+```json
+{ "mcpServers": { "bapbong": { "command": "bapbong", "args": ["mcp"] } } }
+```
+
+## Codex
+
+**Skill** — copy the skill folder into Codex's user skills directory:
+
+```
+git clone --depth 1 https://github.com/shadowgarden-app/shadow-garden-skill-official /tmp/sgs \
+  && mkdir -p ~/.agents/skills && cp -R /tmp/sgs/plugins/bapbong/skills/bapbong ~/.agents/skills/bapbong
+```
+
+**MCP** — `codex mcp add bapbong -- bapbong mcp`, or in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.bapbong]
+command = "bapbong"
+args = ["mcp"]
+```
+
+## Layout
+
+```
+.claude-plugin/marketplace.json     the marketplace (name: shadow-garden)
+plugins/bapbong/
+  .claude-plugin/plugin.json        the plugin
+  .mcp.json                         MCP server: bapbong mcp
+  bin/bapbong                       `bapbong` on the PATH of a Claude Code session
+  skills/bapbong/SKILL.md           the skill
+  skills/bapbong/scripts/           the command, bundled for Node
+```
+
+The skill's source of truth is the bapbong desktop app's repository; this
+repository is the distribution.
