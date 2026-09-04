@@ -30,7 +30,7 @@ claude mcp add bapbong -- bapbong mcp
 
 ## Claude Desktop
 
-**Skill** — Customize › Plugins › + › Add from a repository, paste
+**Skill** — Settings › Skills › Browse › Plugins › + › Add from a repository, paste
 `shadowgarden-app/shadow-garden-skill-official`, then install **bapbong**
 from the shadow-garden marketplace. (No git? Download `bapbong-skill.zip`
 from the [latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest)
