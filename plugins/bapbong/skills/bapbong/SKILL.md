@@ -20,10 +20,12 @@ scripts/bapbong status
 > command is simply `bapbong`. Below, `bapbong …` means `scripts/bapbong …`.
 
 `status` with exit 0 and a folder list means you are connected. Exit 3
-means the app is not reachable. In the sandbox that happens when the user
-has not turned on **Settings › AI agents › Claude Desktop sandbox** in
-bapbong (the app then writes `.bapbong/host.json` into each open folder,
-which is how the command finds it). Tell the user exactly that, then stop.
+means the app is not reachable. In the sandbox that means one of: bapbong
+is not running; the folder you are in is not open in bapbong (the app
+writes `.bapbong/host.json` into each open folder, which is how the command
+finds it); or **Settings › AI agents › Claude Desktop sandbox** was set to
+Off (Auto, the default, opens the door while Claude Desktop's VM runs).
+Tell the user exactly that, then stop.
 
 ## Task → command
 

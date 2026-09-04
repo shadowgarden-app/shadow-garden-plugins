@@ -35,8 +35,9 @@ claude mcp add bapbong -- bapbong mcp
 from the shadow-garden marketplace. (No git? Download `bapbong-skill.zip`
 from the [latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest)
 and use Customize › Skills › + › Upload a skill.)
-Turn on *Settings › AI agents › Claude Desktop sandbox* in bapbong first:
-skills run in a VM and reach the app through the folder you have open.
+Skills run in a VM on the Mac; bapbong's *Settings › AI agents › Claude
+Desktop sandbox* is on Auto by default and opens a door to that VM while it
+runs, so the skill reaches the app through the folder you have open.
 
 **MCP** — Settings › Developer › Edit Config, merge (Claude Desktop starts
 servers with a bare PATH, so use the full path of the launcher the app
