@@ -36,10 +36,13 @@ then in Claude: Customize › Skills › + › Create skill › Upload a skill.
 Turn on *Settings › AI agents › Claude Desktop sandbox* in bapbong first:
 skills run in a VM and reach the app through the folder you have open.
 
-**MCP** — Settings › Developer › Edit Config, merge:
+**MCP** — Settings › Developer › Edit Config, merge (Claude Desktop starts
+servers with a bare PATH, so use the full path of the launcher the app
+keeps at `~/Library/Application Support/bapbong/bin/bapbong` — bapbong's
+Settings › AI agents › How to connect shows the snippet with your path):
 
 ```json
-{ "mcpServers": { "bapbong": { "command": "bapbong", "args": ["mcp"] } } }
+{ "mcpServers": { "bapbong": { "command": "/Users/<you>/Library/Application Support/bapbong/bin/bapbong", "args": ["mcp"] } } }
 ```
 
 ## Codex
