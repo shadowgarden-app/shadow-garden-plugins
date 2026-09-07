@@ -1,6 +1,6 @@
 {
   "name": "bapbong",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Work on .docx documents through the running bapbong app: the bapbong command line as a skill, plus the bapbong MCP server. Every action goes through the app's per-folder permission gate.",
   "author": {
     "name": "Shadow Garden",
