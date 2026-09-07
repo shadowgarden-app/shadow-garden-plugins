@@ -36,7 +36,9 @@ user exactly that, then stop.
 | Add plain paragraphs | `bapbong insert "<line1>\n<line2>" --after "<anchor>" --doc <doc>` (or `--before`, `--end`) |
 | Add headings, tables, fill-in lines | write blocks as JSON, then `bapbong insert --content-file blocks.json --end --doc <doc>` |
 | Create a document | `bapbong new <folder>/<name>.docx --content-file blocks.json` (or `--content "<text>"`) |
-| Bold / italic / alignment of existing text | `bapbong format "<text>" --bold --align center --doc <doc>` |
+| Bold / italic / size / alignment of existing text | `bapbong format "<text>" --bold --font_size 12 --align center --doc <doc>` |
+| Make a paragraph a heading / add tab stops (by block number from `cat`) | `bapbong format --block_index <n> --heading 2 --doc <doc>` · `--tabs-file stops.json` |
+| Change an existing table (`cat` shows `table: { index, row, cell }` on its cells) | `bapbong table <index> --rows-file rows.json` (append; `--at <row>` inserts) · `--delete_rows 2,3` · `--merge <row>,<from>,<to>` · `--widths 10%,60%,30%` · `--borders none` · `--header` |
 | Resize / rotate an image | `bapbong image <block> --width 300 --doc <doc>` |
 | New folder / move / rename / delete | `bapbong mkdir <path>` · `bapbong mv <from> <to>` · `bapbong rm <path>` |
 | Show the user a document | `bapbong open <doc>` |
