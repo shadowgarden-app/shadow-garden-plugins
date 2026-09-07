@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "bapbong": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/bin/bapbong",
+      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/bapbong",
       "args": ["mcp"]
     }
   }

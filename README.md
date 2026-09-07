@@ -21,7 +21,8 @@ sessions).
 /plugin install bapbong@shadow-garden
 ```
 
-That gives the skill, `bapbong` on the session's PATH, and the MCP server.
+That gives the skill and the MCP server (`bapbong` itself is on the PATH
+because the app put it there when it launched).
 MCP only, without the plugin:
 
 ```
@@ -71,11 +72,16 @@ args = ["mcp"]
 .claude-plugin/marketplace.json     the marketplace (name: shadow-garden)
 plugins/bapbong/
   .claude-plugin/plugin.json        the plugin
-  .mcp.json                         MCP server: bapbong mcp
-  bin/bapbong                       `bapbong` on the PATH of a Claude Code session
+  .mcp.json                         MCP server: scripts/bapbong mcp
+  scripts/bapbong                   the command for .mcp.json and for shells without `bapbong`
   skills/bapbong/SKILL.md           the skill
   skills/bapbong/scripts/           the command, bundled for Node
 ```
 
 The skill's source of truth is the bapbong desktop app's repository; this
 repository is the distribution.
+
+There is deliberately no top-level `bin/` in the plugin: claude.ai rejects a
+plugin that has one (marketplace sync and upload alike), which would leave it
+usable from Claude Code only. On the Mac the app itself puts `bapbong` on the
+PATH; elsewhere the skill calls `scripts/bapbong` by path.

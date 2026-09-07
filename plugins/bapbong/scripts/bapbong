@@ -1,0 +1,15 @@
+#!/bin/sh
+# The bapbong command line for this plugin's MCP server config (.mcp.json)
+# and for a shell that has no `bapbong` on the PATH — a sandbox, a remote
+# session. It runs the Node bundle that ships with the skill: the same
+# command the bapbong app installs on the Mac. Needs `node`.
+#
+# Deliberately NOT a top-level `bin/`: claude.ai rejects any plugin that has
+# one (marketplace sync and direct upload alike), which would leave the
+# plugin usable from Claude Code only.
+self="$0"
+while [ -L "$self" ]; do
+  target="$(readlink "$self")"
+  case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
+done
+exec node "$(dirname "$self")/../skills/bapbong/scripts/bapbong.cjs" "$@"
