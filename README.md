@@ -11,8 +11,8 @@ folder (off / read-only / ask / auto). Nothing edits a file behind their back.
 
 Requires the bapbong app to be running. On a Mac the app installs the
 `bapbong` command itself; the skill carries a Node bundle of the same command
-for places where the app is not present (Claude Desktop's sandbox, remote
-sessions).
+for a shell that has no `bapbong` on its PATH (Cowork's sandboxed shell, a
+VM, a remote session).
 
 ## Claude Code
 
@@ -36,9 +36,10 @@ claude mcp add bapbong -- bapbong mcp
 from the shadow-garden marketplace. (No git? Download `bapbong-skill.zip`
 from the [latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest)
 and use Customize › Skills › + › Upload a skill.)
-Skills run in a VM on the Mac; bapbong's *Settings › AI agents › Claude
-Desktop sandbox* is on Auto by default and opens a door to that VM while it
-runs, so the skill reaches the app through the folder you have open.
+Cowork runs the skill on the Mac, where it finds the running app by
+itself. If your organization enforces Cowork's full VM sandbox, bapbong
+notices the VM and opens a door to it while it runs, through the folder you
+have open — nothing to turn on.
 
 **MCP** — Settings › Developer › Edit Config, merge (Claude Desktop starts
 servers with a bare PATH, so use the full path of the launcher the app
