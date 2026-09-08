@@ -18,7 +18,7 @@ VM, a remote session).
 
 ```
 /plugin marketplace add shadowgarden-app/shadow-garden-skill-official
-/plugin install bapbong@shadow-garden
+/plugin install bapbong@shadow-garden-skill-official
 ```
 
 That gives the skill and the MCP server (`bapbong` itself is on the PATH
@@ -33,7 +33,7 @@ claude mcp add bapbong -- bapbong mcp
 
 **Skill** — Settings › Skills › Browse › Plugins › + › Add from a repository, paste
 `shadowgarden-app/shadow-garden-skill-official`, then install **bapbong**
-from the shadow-garden marketplace. (No git? Download `bapbong-skill.zip`
+from the shadow-garden-skill-official marketplace. (No git? Download `bapbong-skill.zip`
 from the [latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest)
 and use Customize › Skills › + › Upload a skill.)
 Cowork runs the skill on the Mac, where it finds the running app by
@@ -70,7 +70,7 @@ args = ["mcp"]
 ## Layout
 
 ```
-.claude-plugin/marketplace.json     the marketplace (name: shadow-garden)
+.claude-plugin/marketplace.json     the marketplace (name: shadow-garden-skill-official, same as the repo)
 plugins/bapbong/
   .claude-plugin/plugin.json        the plugin
   .mcp.json                         MCP server: scripts/bapbong mcp
