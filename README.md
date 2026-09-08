@@ -1,4 +1,4 @@
-# shadow-garden-skill-official
+# shadow-garden-plugins
 
 Official plugins and skills for [bapbong](https://bapbong.app), the `.docx`
 editor by Shadow Garden. Everything here talks to the **running bapbong app**
@@ -17,8 +17,8 @@ VM, a remote session).
 ## Claude Code
 
 ```
-/plugin marketplace add shadowgarden-app/shadow-garden-skill-official
-/plugin install bapbong@shadow-garden-skill-official
+/plugin marketplace add shadowgarden-app/shadow-garden-plugins
+/plugin install bapbong@shadow-garden-plugins
 ```
 
 That gives the skill and the MCP server (`bapbong` itself is on the PATH
@@ -32,9 +32,9 @@ claude mcp add bapbong -- bapbong mcp
 ## Claude Desktop
 
 **Skill** — Settings › Skills › Browse › Plugins › + › Add from a repository, paste
-`shadowgarden-app/shadow-garden-skill-official`, then install **bapbong**
-from the shadow-garden-skill-official marketplace. (No git? Download `bapbong-skill.zip`
-from the [latest release](https://github.com/shadowgarden-app/shadow-garden-skill-official/releases/latest)
+`shadowgarden-app/shadow-garden-plugins`, then install **bapbong**
+from the shadow-garden-plugins marketplace. (No git? Download `bapbong-skill.zip`
+from the [latest release](https://github.com/shadowgarden-app/shadow-garden-plugins/releases/latest)
 and use Customize › Skills › + › Upload a skill.)
 Cowork runs the skill on the Mac, where it finds the running app by
 itself. If your organization enforces Cowork's full VM sandbox, bapbong
@@ -55,7 +55,7 @@ Settings › AI agents › How to connect shows the snippet with your path):
 **Skill** — copy the skill folder into Codex's user skills directory:
 
 ```
-git clone --depth 1 https://github.com/shadowgarden-app/shadow-garden-skill-official /tmp/sgs \
+git clone --depth 1 https://github.com/shadowgarden-app/shadow-garden-plugins /tmp/sgs \
   && mkdir -p ~/.agents/skills && cp -R /tmp/sgs/plugins/bapbong/skills/bapbong ~/.agents/skills/bapbong
 ```
 
@@ -70,7 +70,7 @@ args = ["mcp"]
 ## Layout
 
 ```
-.claude-plugin/marketplace.json     the marketplace (name: shadow-garden-skill-official, same as the repo)
+.claude-plugin/marketplace.json     the marketplace (name: shadow-garden-plugins, same as the repository)
 plugins/bapbong/
   .claude-plugin/plugin.json        the plugin
   .mcp.json                         MCP server: scripts/bapbong mcp
