@@ -41,7 +41,7 @@ user exactly that, then stop.
 | Change an existing table (`cat` shows `table: { index, row, cell }` on its cells) | `bapbong table <index> --rows-file rows.json` (append; `--at <row>` inserts) · `--delete_rows 2,3` · `--merge <row>,<from>,<to>` · `--widths 10%,60%,30%` · `--borders none` · `--header` |
 | Resize / rotate an image | `bapbong image <block> --width 300 --doc <doc>` |
 | New folder / move / rename / delete | `bapbong mkdir <path>` · `bapbong mv <from> <to>` · `bapbong rm <path>` |
-| Show the user a document | `bapbong open <doc>` |
+| Show the user a document (a file on disk; a new document waiting for review is opened by the user from the review list) | `bapbong open <doc>` |
 | Look at the pages yourself | `bapbong render <doc> --pages 1-2` → PNG files, view them |
 | Page count, page size, sections | `bapbong check <doc>` |
 | What is waiting for the user | `bapbong pending` |
@@ -108,8 +108,9 @@ The user sets one level per folder; `status` shows it.
   editor at once (they see it, ⌘Z undoes it). Anything else — another
   document, a new document, a folder, a move, a delete — is **held in the app
   for review**: the result says `"status": "pending"`, nothing is on disk yet.
-  Keep editing a pending new document by its path; the user saves it once.
-  Say what you asked for and why.
+  Keep editing a pending new document by its path; `render` and `check` work
+  on it too (they use its pending version), only `open` does not. The user
+  saves it once. Say what you asked for and why.
 - **auto** — everything happens at once, each with an undo in the app.
 
 Expect refusals: a document open in a tab cannot be deleted; a document with
@@ -121,7 +122,8 @@ exist"; a path already waiting for review is refused until the user decides.
 1. `bapbong cat <doc>`: the text is where you put it, cells are separate
    blocks.
 2. `bapbong render <doc> --pages 1-2`, then **look at the PNG files** (an MCP
-   client gets the pages inline). Check: tables are real tables with straight
+   client gets the pages inline). This works on a document still waiting for
+   the user's review, so verify before you report. Check: tables are real tables with straight
    column lines, nothing is drawn with characters, side-by-side text is
    aligned, fill-in lines are dotted leaders, headings look like headings,
    nothing spills onto an unexpected page.

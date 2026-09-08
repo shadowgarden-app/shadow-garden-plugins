@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 — 2026-09-08
+
+- `render` and `check` work on a new document that is still waiting for the user's review (rendered from its pending version in a hidden editor; nothing is promoted). `open` on such a document now explains that the user opens it from the review list. Requires the matching bapbong app build.
+
 ## 0.2.0 — 2026-09-07
 
 - Repository and marketplace renamed to `shadow-garden-plugins` (Anthropic's naming: `claude-plugins-official`, `knowledge-work-plugins`). The marketplace `name` must equal the repository name: Claude Desktop refreshes a marketplace added from a repository under the repository's name, so the earlier `shadow-garden` made its Update button fail (`NOT_REGISTERED`). Claude Code users re-add the marketplace and install `bapbong@shadow-garden-plugins`.
