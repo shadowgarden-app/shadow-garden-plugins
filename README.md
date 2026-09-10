@@ -16,6 +16,15 @@ VM, a remote session).
 
 ## Claude Code
 
+One line in a terminal, then start a new `claude` session:
+
+```
+claude plugin marketplace add https://github.com/shadowgarden-app/shadow-garden-plugins.git --scope user && claude plugin install bapbong@shadow-garden-plugins --scope user
+```
+
+Or inside Claude Code, as two separate commands — type each one on its own,
+since the first opens a dialog and a pasted second line would land in it:
+
 ```
 /plugin marketplace add shadowgarden-app/shadow-garden-plugins
 /plugin install bapbong@shadow-garden-plugins
