@@ -1,6 +1,6 @@
 ---
 name: bapbong
-description: "Use this skill to read, edit, create, search, move or delete Word documents (.docx) THROUGH THE RUNNING BAPBONG APP — the user's own editor — instead of manipulating .docx files directly. Triggers: the user has bapbong open, mentions a folder open in bapbong, or wants a document created/edited where they can see and undo the change (letters, forms, reports, anything with headings and tables). Every action goes through the app's permission gate (off / read-only / ask / auto, set per folder by the user): at 'ask' your changes wait in the app for the user's review, so tell them what you did. If bapbong is not running (`bapbong status` exits 3), do not fall back to editing the file directly without telling the user — ask them to open bapbong, or use the docx skill on a copy."
+description: "Use this skill to read, edit, create, search, move or delete Word documents (.docx) THROUGH THE RUNNING BAPBONG APP — the user's own editor — instead of manipulating .docx files directly. Triggers: the user has bapbong open, mentions a folder open in bapbong, or wants a document created/edited where they can see and undo the change (letters, forms, reports, anything with headings and tables). Every action goes through the app's permission gate (off / read-only / ask / auto, set per folder by the user): at 'ask' your changes wait in the app for the user's review, so tell them what you did. If this session also has the bapbong MCP tools (app_status, get_document, replace_text, …), prefer them: they reach the app from anywhere, including a cloud or sandboxed session where this shell cannot. If `bapbong status` exits 3 or 4, that means THIS SHELL cannot reach the app — not that the app is closed — so switch to the MCP tools; only when there are none, ask the user to open bapbong (never edit the file directly without telling them, or use the docx skill on a copy)."
 ---
 
 # bapbong — documents through the user's editor
@@ -19,9 +19,20 @@ does, under the permission the user set for that folder.
 scripts/bapbong status
 ```
 
-Exit 0 with a folder list: connected. Exit 3: the app is not reachable —
-bapbong is not running, or the folder you are in is not open in it. Tell the
-user exactly that, then stop.
+Exit 0 with a folder list: connected. Exit 3 or 4: THIS SHELL cannot reach
+the app. That is the normal state of a cloud or sandboxed session — the app
+runs on the user's Mac, and a shell that is not on that Mac only reaches it
+through a folder the user opened in bapbong AND mounted here. It does not
+mean bapbong is closed. Do this, in order:
+
+1. If the session has the bapbong MCP tools (`app_status`, `get_document`,
+   `replace_text`, …), use them for everything below instead of this shell.
+   They are the same commands, and they reach the app from anywhere.
+2. Otherwise, tell the user: "I can't reach bapbong from here. Open bapbong
+   on your Mac and make sure it is running; if this is a cloud session, add
+   the bapbong plugin's tools or work from a local session." Then stop.
+
+Never conclude "bapbong is not running" from an exit code alone.
 
 ## Task → command
 
