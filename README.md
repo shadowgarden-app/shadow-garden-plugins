@@ -8,7 +8,7 @@ behind their back.
 
 | Plugin | What it gives an agent |
 |---|---|
-| `bapbong` | the `bapbong` command line as a skill (read, search, edit text and formatting, lists, tables, pictures, links, page setup; create, move, delete; render pages), and the bapbong MCP server |
+| `bapbong` | the `bapbong` command line as a skill (read, search, edit text and formatting, lists, tables, pictures, links, styles, headers and footers, footnotes, tables of contents, page setup; create, move, delete; render pages), and the bapbong MCP server |
 
 Requires the bapbong app to be running. On a Mac the app installs the
 `bapbong` command itself; the skill carries a Node bundle of the same command

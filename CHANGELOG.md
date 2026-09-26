@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 — 2026-09-26
+
+- **Headers and footers:** `header` / `footer` (MCP `edit_header_footer`) rewrite one — `{ "field": "page" }` and `{ "field": "pages" }` are the page number and count — or replace text inside it, for one section or all. `cat` shows them as `chrome`, with `{page}` where the number goes.
+- **Spacing and indents:** `format --space_before/--space_after` (pt), `--line_spacing` (1.15, `18pt`, `at least 12pt`), `--indent_left/--indent_right/--first_line/--hanging`; paragraph blocks take `spaceBefore`, `spaceAfter`, `lineSpacing`, `indent`.
+- **The document's own styles:** `styles` (MCP `list_styles`) lists them; `format --style` and a block's `style` take any of them by name — the paragraph gets the style's look and keeps its name in Word. `Heading N` always works.
+- **Table of contents:** `toc --after <text>` (MCP `insert_toc`) makes a real Word TOC from the headings; on the document the user has open the page numbers are filled in at once, otherwise Word updates them on open.
+- **Footnotes:** `footnote <text> <note>` (MCP `insert_footnote`); `cat` lists them.
+- Needs a bapbong app built with these commands (after 0.44.0).
+
 ## 0.3.0 — 2026-09-26
 
 - An agent can now make **real lists** (`"list": "bullet" | "number"`, `"level"` in blocks; `format --list`, `--list_level`); `cat` shows each list item's kind and level. A second numbered list starts at 1 again; an item added right after a list joins it.
