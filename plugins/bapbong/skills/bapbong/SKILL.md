@@ -38,19 +38,28 @@ Never conclude "bapbong is not running" from an exit code alone.
 
 | Task | Command |
 |---|---|
-| What is open, which folders, what may I do | `bapbong status` |
+| What the user has open — folders, documents on their own, what you may do | `bapbong status` |
 | Every command with its arguments (read before guessing flags) | `bapbong tools` |
 | List a folder / every document | `bapbong ls [folder]` · `bapbong docs` |
-| Read a document as numbered blocks (table cells are blocks too) | `bapbong cat <doc>` (omit `<doc>` for the one the user has open) |
-| Find text across the folder / inside one document | `bapbong search "<text>"` · `bapbong find "<text>" --doc <doc>` |
+| Read a document as numbered blocks (table cells are blocks too; headers and footers come as `chrome`, read-only) | `bapbong cat <doc>` (omit `<doc>` for the one the user has open) |
+| Find text across everything open / inside one document | `bapbong search "<text>"` · `bapbong find "<text>" --doc <doc>` |
 | Replace text, formatting kept | `bapbong replace "<old>" "<new>" --doc <doc>` |
 | Add plain paragraphs | `bapbong insert "<line1>\n<line2>" --after "<anchor>" --doc <doc>` (or `--before`, `--end`) |
-| Add headings, tables, fill-in lines | write blocks as JSON, then `bapbong insert --content-file blocks.json --end --doc <doc>` |
+| Add headings, lists, tables, fill-in lines | write blocks as JSON, then `bapbong insert --content-file blocks.json --end --doc <doc>` |
 | Create a document | `bapbong new <folder>/<name>.docx --content-file blocks.json` (or `--content "<text>"`) |
+| Remove whole paragraphs (an empty `replace` only empties one) | `bapbong block-rm <block> --doc <doc>` · `--count 3` for several in a row |
 | Bold / italic / size / alignment of existing text | `bapbong format "<text>" --bold --font_size 12 --align center --doc <doc>` |
+| Link text to a web page, an e-mail address or a bookmark (`cat` lists each block's `links`) | `bapbong format "<text>" --link https://example.com --doc <doc>` · `--link "mailto:…"` · `--link "#Bookmark"` · `--link none` unlinks |
+| Font, colour, highlight, super/subscript, or back to plain | `bapbong format "<text>" --font Georgia --color "#C00000" --highlight "#FFFF00" --doc <doc>` · `--vertical_align superscript` · `--clear_formatting` (links stay) |
 | Make a paragraph a heading / add tab stops (by block number from `cat`) | `bapbong format --block_index <n> --heading 2 --doc <doc>` · `--tabs-file stops.json` |
-| Change an existing table (`cat` shows `table: { index, row, cell }` on its cells) | `bapbong table <index> --rows-file rows.json` (append; `--at <row>` inserts) · `--delete_rows 2,3` · `--merge <row>,<from>,<to>` · `--widths 10%,60%,30%` · `--borders none` · `--header` |
-| Resize / rotate an image | `bapbong image <block> --width 300 --doc <doc>` |
+| Turn paragraphs into a list, nest an item, end the list (`cat` shows `list: { kind, level }`) | `bapbong format --block_index <n> --list number` (one call per paragraph, top to bottom — each joins the list above it) · `--list_level 2` · `--list none` |
+| Change an existing table (`cat` shows `table: { index, row, cell }` on its cells) | `bapbong table <index> --rows-file rows.json` (append; `--at <row>` inserts) · `--delete_rows 2,3` · `--insert_columns <at>[,<count>]` · `--delete_columns 1` · `--merge <row>,<from>,<to>` · `--widths 10%,60%,30%` · `--borders none` · `--header` · `--delete_table` (the whole table) |
+| Page orientation, paper, margins, columns — one section or all | `bapbong page --orientation landscape --paper A4 --margins narrow --doc <doc>` · `--margins 2,2.5,2,2.5` (cm: top,right,bottom,left) · `--columns 2` · `--section 2` |
+| Landscape pages inside a portrait document | `bapbong page --section_break_after <block>` before them and after them (one call each; `cat` then shows each block's `section`), then `bapbong page --section <n> --orientation landscape` · `--remove_section_break <n>` undoes a break |
+| Resize / rotate a picture | `bapbong image <block> --width 300 --doc <doc>` |
+| Put a picture in (a file you made, or one you draw as SVG) | `bapbong image-add <picture.png> --position document_end --doc <doc>` · `--svg-file diagram.svg --position after --anchor_text "<text>"` |
+| Swap one picture for another, keeping the layout around it | `bapbong image-set <block> <picture.png> --doc <doc>` · `--svg-file diagram.svg` |
+| Remove a picture | `bapbong image-rm <block> --doc <doc>` |
 | New folder / move / rename / delete | `bapbong mkdir <path>` · `bapbong mv <from> <to>` · `bapbong rm <path>` |
 | Show the user a document (a file on disk; a new document waiting for review is opened by the user from the review list) | `bapbong open <doc>` |
 | Look at the pages yourself | `bapbong render <doc> --pages 1-2` → PNG files, view them |
@@ -71,14 +80,18 @@ line — or an array of blocks. A block is a string (a paragraph) or one of:
 { "paragraph": text | inlines, "heading": 1-6, "style": "Title"|"Subtitle",
   "align": "left"|"center"|"right"|"justify",
   "tabs": [{ "at": cm | "100%", "align": "right"|"center", "leader": "dot"|"underscore" }],
-  "pageBreakBefore": true, "bold"/"italic"/"underline": true }
+  "pageBreakBefore": true, "list": "bullet"|"number", "level": 1-3, …format }
 { "table": [[cell, …], …], "widths": [cm | "%", … one per column],
   "borders": "grid"|"outer"|"none", "header": true, "align": "center" }
 ```
 
-Inlines: `"text"` · `{ "text": "…", "bold"/"italic"/"underline": true }` ·
-`{ "tab": true }`. A cell: text, inlines, or
-`{ "text": …, "colspan": n, "align": …, "bold": true, "shading": "#RRGGBB" }`.
+Inlines: `"text"` · `{ "text": "…", "link": "https://…", …format }` (link is
+optional) · `{ "tab": true }`, where
+format is any of `"bold"`/`"italic"`/`"underline"`/`"strike"`/
+`"superscript"`/`"subscript"`: true, `"color"`/`"highlight"`: `"#RRGGBB"`,
+`"font"`: a name, `"size"`: points. A paragraph block or a cell takes the same
+format for all its text. A cell: text, inlines, or
+`{ "text": …, "colspan": n, "align": …, "shading": "#RRGGBB", …format }`.
 Every row must cover the same number of columns (merge with `colspan`).
 
 The two shapes you will need most:
@@ -100,18 +113,33 @@ The two shapes you will need most:
   value) are a two-column table with `"borders": "none"`; a fill-in line is a
   tab with a `leader`.
 - **Never fake a heading** with bold + centered text. Use `"heading"`.
-- **No `\n` inside a paragraph** — one paragraph per block. No `•` typed by
-  hand.
+- **No `\n` inside a paragraph** — one paragraph per block.
+- **Never type `•`, `-` or `1.` to make a list.** Each item is a paragraph
+  block with `"list": "bullet"` or `"number"`; consecutive items are one list
+  and the app numbers them (a second numbered list starts at 1 again).
+- **Never delete a picture and insert a new one in its place.** `image-set`
+  keeps the anchor, the text wrap and the width; delete + add loses all three
+  and moves the page. And check what you are replacing: `cat` reports each
+  picture's `kind`, and `drawing` (art the file describes shape by shape) or
+  `equation` becomes a flat picture that the user cannot edit again — say so
+  before you do it.
+- A picture must be a PNG, JPEG, GIF or BMP file inside a folder the user
+  opened, or SVG you write (`--svg-file`, self-contained: no links out).
 - `replace` needs the exact existing text, matched once — include surrounding
   words or pass `--occurrence n`. `cat` first.
 - Give `expectedVersion` (the `docVersion` from your last `cat`) when several
   edits depend on each other; a stale version is refused, you re-read.
 - Paths: use the ones you see (`ls` prints them). Do not try to approve
   anything; `pending` shows the queue, the user decides in the app.
+- The workspace is what the user can see in bapbong: the documents in their
+  open folders AND the ones they opened on their own. `docs` and `search`
+  cover both. A document opened on its own is in no folder, so `ls`, `mv` and
+  `new` inside it are refused — read, edit and `rm` work as usual.
 
 ## How the permission gate shapes your work
 
-The user sets one level per folder; `status` shows it.
+The user sets ONE level for their whole workspace — every folder and every
+document they opened on its own; `status` shows it.
 
 - **read** — reads and searches only. Every mutation is exit 2; do not retry,
   tell the user which folder is read-only.
@@ -125,7 +153,7 @@ The user sets one level per folder; `status` shows it.
 - **auto** — everything happens at once, each with an undo in the app.
 
 Expect refusals: a document open in a tab cannot be deleted; a document with
-unreviewed changes cannot be moved; a path outside the open folders "does not
+unreviewed changes cannot be moved; a path the user has not opened "does not
 exist"; a path already waiting for review is refused until the user decides.
 
 ## Verify — every time you changed layout
