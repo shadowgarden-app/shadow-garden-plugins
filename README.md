@@ -2,12 +2,13 @@
 
 Official plugins and skills for [bapbong](https://bapbong.app), the `.docx`
 editor by Shadow Garden. Everything here talks to the **running bapbong app**
-— the user's own editor — and goes through the permission the user set per
-folder (off / read-only / ask / auto). Nothing edits a file behind their back.
+— the user's own editor — and goes through the one permission the user set
+for their workspace (off / read-only / ask / auto). Nothing edits a file
+behind their back.
 
 | Plugin | What it gives an agent |
 |---|---|
-| `bapbong` | the `bapbong` command line as a skill (read, search, edit, create, move, delete, render pages), and the bapbong MCP server |
+| `bapbong` | the `bapbong` command line as a skill (read, search, edit text and formatting, lists, tables, pictures, links, page setup; create, move, delete; render pages), and the bapbong MCP server |
 
 Requires the bapbong app to be running. On a Mac the app installs the
 `bapbong` command itself; the skill carries a Node bundle of the same command
