@@ -50,10 +50,15 @@ Never conclude "bapbong is not running" from an exit code alone.
 | Remove whole paragraphs (an empty `replace` only empties one) | `bapbong block-rm <block> --doc <doc>` · `--count 3` for several in a row |
 | Bold / italic / size / alignment of existing text | `bapbong format "<text>" --bold --font_size 12 --align center --doc <doc>` |
 | Link text to a web page, an e-mail address or a bookmark (`cat` lists each block's `links`) | `bapbong format "<text>" --link https://example.com --doc <doc>` · `--link "mailto:…"` · `--link "#Bookmark"` · `--link none` unlinks |
+| Space above/below, line spacing, indents of a paragraph | `bapbong format --block_index <n> --space_after 6 --line_spacing 1.15 --doc <doc>` · `--line_spacing 18pt` (exact) · `--indent_left 1 --first_line 0.5` (cm) · `--hanging 1` · `0` removes |
 | Font, colour, highlight, super/subscript, or back to plain | `bapbong format "<text>" --font Georgia --color "#C00000" --highlight "#FFFF00" --doc <doc>` · `--vertical_align superscript` · `--clear_formatting` (links stay) |
+| The document's own paragraph styles, and applying one (its look and its name for Word) | `bapbong styles <doc>` · `bapbong format --block_index <n> --style "Quote" --doc <doc>` · a block's `"style": "Quote"` |
 | Make a paragraph a heading / add tab stops (by block number from `cat`) | `bapbong format --block_index <n> --heading 2 --doc <doc>` · `--tabs-file stops.json` |
 | Turn paragraphs into a list, nest an item, end the list (`cat` shows `list: { kind, level }`) | `bapbong format --block_index <n> --list number` (one call per paragraph, top to bottom — each joins the list above it) · `--list_level 2` · `--list none` |
 | Change an existing table (`cat` shows `table: { index, row, cell }` on its cells) | `bapbong table <index> --rows-file rows.json` (append; `--at <row>` inserts) · `--delete_rows 2,3` · `--insert_columns <at>[,<count>]` · `--delete_columns 1` · `--merge <row>,<from>,<to>` · `--widths 10%,60%,30%` · `--borders none` · `--header` · `--delete_table` (the whole table) |
+| A footnote on a word or sentence (`cat` lists them under `footnotes`) | `bapbong footnote "<the text it follows>" "<the note>" --doc <doc>` · `--content-file note.json` for formatting · numbers follow the document |
+| A table of contents (headings must be real headings) | `bapbong toc --after "<title text>" --title Contents --doc <doc>` · `--levels 2` · the result says whether page numbers are `updated` or `pending` (bapbong fills them when the user updates the TOC, Word when it opens the file) |
+| Change a header or footer (`cat` lists them under `chrome`; `{page}` is the page number) | `bapbong footer --old_text "Draft" --new_text "Final" --doc <doc>` · `bapbong footer --content-file f.json` where a block holds `{ "field": "page" }` / `{ "field": "pages" }` · `--section 2` for one section · `bapbong header --content "Acme Ltd"` |
 | Page orientation, paper, margins, columns — one section or all | `bapbong page --orientation landscape --paper A4 --margins narrow --doc <doc>` · `--margins 2,2.5,2,2.5` (cm: top,right,bottom,left) · `--columns 2` · `--section 2` |
 | Landscape pages inside a portrait document | `bapbong page --section_break_after <block>` before them and after them (one call each; `cat` then shows each block's `section`), then `bapbong page --section <n> --orientation landscape` · `--remove_section_break <n>` undoes a break |
 | Resize / rotate a picture | `bapbong image <block> --width 300 --doc <doc>` |
@@ -80,13 +85,16 @@ line — or an array of blocks. A block is a string (a paragraph) or one of:
 { "paragraph": text | inlines, "heading": 1-6, "style": "Title"|"Subtitle",
   "align": "left"|"center"|"right"|"justify",
   "tabs": [{ "at": cm | "100%", "align": "right"|"center", "leader": "dot"|"underscore" }],
-  "pageBreakBefore": true, "list": "bullet"|"number", "level": 1-3, …format }
+  "pageBreakBefore": true, "list": "bullet"|"number", "level": 1-3,
+  "spaceBefore"/"spaceAfter": pt, "lineSpacing": 1.15 | { "exact": pt },
+  "indent": { "left", "right", "firstLine", "hanging": cm }, …format }
 { "table": [[cell, …], …], "widths": [cm | "%", … one per column],
   "borders": "grid"|"outer"|"none", "header": true, "align": "center" }
 ```
 
 Inlines: `"text"` · `{ "text": "…", "link": "https://…", …format }` (link is
-optional) · `{ "tab": true }`, where
+optional) · `{ "tab": true }` · `{ "field": "page" }` / `{ "field": "pages" }`
+(page number / count, for headers and footers), where
 format is any of `"bold"`/`"italic"`/`"underline"`/`"strike"`/
 `"superscript"`/`"subscript"`: true, `"color"`/`"highlight"`: `"#RRGGBB"`,
 `"font"`: a name, `"size"`: points. A paragraph block or a cell takes the same
@@ -113,6 +121,13 @@ The two shapes you will need most:
   value) are a two-column table with `"borders": "none"`; a fill-in line is a
   tab with a `leader`.
 - **Never fake a heading** with bold + centered text. Use `"heading"`.
+- **Never fake a footnote** with a superscript number and a line at the
+  bottom: `bapbong footnote` makes one Word numbers and places.
+- **Never type a table of contents.** `bapbong toc` makes a real one from
+  the headings; typed dots and page numbers go stale with the first edit.
+- **Use the document's own styles** (`bapbong styles`) before formatting by
+  hand: a paragraph in "Quote" or a company style looks right and stays
+  that style for whoever edits it next in Word.
 - **No `\n` inside a paragraph** — one paragraph per block.
 - **Never type `•`, `-` or `1.` to make a list.** Each item is a paragraph
   block with `"list": "bullet"` or `"number"`; consecutive items are one list
