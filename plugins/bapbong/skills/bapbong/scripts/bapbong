@@ -7,4 +7,23 @@ while [ -L "$self" ]; do
   target="$(readlink "$self")"
   case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
 done
-exec node "$(dirname "$self")/bapbong.cjs" "$@"
+dir="$(dirname "$self")"
+
+# A GUI app (Claude Desktop) starts MCP servers with the bare system PATH,
+# where a Node installed by Homebrew, Volta or nvm is not found. Look in the
+# usual places before giving up.
+nvm_node=""
+for n in "$HOME"/.nvm/versions/node/*/bin/node; do
+  [ -x "$n" ] && nvm_node="$n"
+done
+for n in "$(command -v node 2>/dev/null)" /opt/homebrew/bin/node /usr/local/bin/node "$HOME/.volta/bin/node" "$nvm_node"; do
+  [ -n "$n" ] && [ -x "$n" ] && exec "$n" "$dir/bapbong.cjs" "$@"
+done
+
+# No Node at all. On the Mac the app keeps its own launcher (its runtime and
+# the same command line), rewritten every time it starts.
+app="$HOME/Library/Application Support/bapbong/bin/bapbong"
+[ -x "$app" ] && exec "$app" "$@"
+
+echo "bapbong: this needs Node.js (node), and none was found. Install Node, or open the bapbong app once on this Mac." >&2
+exit 127

@@ -1,8 +1,10 @@
 #!/bin/sh
 # The bapbong command line for this plugin's MCP server config (.mcp.json)
 # and for a shell that has no `bapbong` on the PATH — a sandbox, a remote
-# session. It runs the Node bundle that ships with the skill: the same
-# command the bapbong app installs on the Mac. Needs `node`.
+# session. It hands over to the skill's own launcher, which runs the Node
+# bundle that ships with the skill (the same command the bapbong app
+# installs on the Mac) and finds Node even when a GUI app started it with a
+# bare PATH — falling back to the app's own runtime when there is no Node.
 #
 # Deliberately NOT a top-level `bin/`: claude.ai rejects any plugin that has
 # one (marketplace sync and direct upload alike), which would leave the
@@ -12,4 +14,4 @@ while [ -L "$self" ]; do
   target="$(readlink "$self")"
   case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
 done
-exec node "$(dirname "$self")/../skills/bapbong/scripts/bapbong.cjs" "$@"
+exec "$(dirname "$self")/../skills/bapbong/scripts/bapbong" "$@"
